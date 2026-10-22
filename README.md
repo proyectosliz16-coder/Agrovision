@@ -1,56 +1,171 @@
-# Agrovision - ProyectoTT
+# MJ Agrovision - ProyectoTT
+### Inteligencia artificial aplicada al análisis agrícola mediante visión por computadora
 
-Este proyecto es una plataforma web para el análisis agrícola y detección de maleza en cultivos de frijol utilizando inteligencia artificial (modelos de segmentación U-Net). 
+AgroVision es un proyecto que utiliza inteligencia artificial y visión por computadora para analizar imágenes de cultivos de frijol mediante técnicas de segmentación semántica. Su objetivo es identificar y diferenciar elementos presentes en las imágenes, como plantas, maleza y suelo.
 
-## Estructura del Proyecto
+El proyecto integra un modelo de inteligencia artificial con una aplicación web para facilitar la visualización de los resultados.
 
-El proyecto está dividido en dos partes principales:
-- **Frontend**: Desarrollado en React y Vite.
-- **Backend**: Desarrollado en Python con FastAPI y PyTorch.
+## Características principales
 
-> **Nota importante sobre los modelos:** Los archivos `.pth` (los pesos del modelo de PyTorch) no se incluyen en este repositorio de GitHub por restricciones de tamaño de archivo (máximo 100MB). Deberás colocar tus archivos `unet_frijol.pth` y `modelo_frijol_v2.pth` en la raíz del proyecto localmente para que el backend funcione.
+- **Segmentación de imágenes:** análisis visual de cultivos de frijol.
+- **Identificación de elementos:** diferenciación entre plantas, maleza y suelo.
+- **Modelo de inteligencia artificial:** implementación de una arquitectura U-Net.
+- **Procesamiento de imágenes:** preparación y análisis de imágenes agrícolas.
+- **Backend:** procesamiento de solicitudes e integración del modelo mediante Python y FastAPI.
+- **Interfaz web:** visualización e interacción con el sistema mediante React.
 
----
+## Tecnologías utilizadas
 
-## 🛠️ Instrucciones para instalar y correr localmente (Localhost)
+| Tecnología | Uso |
+|---|---|
+| Python | Desarrollo del backend y procesamiento de imágenes |
+| PyTorch | Desarrollo y ejecución de modelos de IA |
+| U-Net | Arquitectura para segmentación de imágenes |
+| FastAPI | API para integrar el modelo con la aplicación |
+| React | Desarrollo de la interfaz de usuario |
+| Vite | Herramienta de desarrollo y construcción del frontend |
+| JavaScript | Funcionalidad de la aplicación web |
 
-### 1. Preparación de Modelos de IA
-Descarga o copia los archivos de los modelos pesados en la carpeta raíz del proyecto (`ProyectoTT`):
+## Arquitectura del proyecto
+
+AgroVision integra los componentes de inteligencia artificial y desarrollo web para procesar imágenes y presentar los resultados.
+
+```text
+                ┌─────────────────────┐
+                │   Usuario           │
+                └──────────┬──────────┘
+                           │
+                           ▼
+                ┌─────────────────────┐
+                │  Frontend - React   │
+                └──────────┬──────────┘
+                           │
+                           ▼
+                ┌─────────────────────┐
+                │ Backend - FastAPI   │
+                └──────────┬──────────┘
+                           │
+                           ▼
+                ┌─────────────────────┐
+                │ Modelo de IA U-Net  │
+                └──────────┬──────────┘
+                           │
+                           ▼
+                ┌─────────────────────┐
+                │ Resultados de       │
+                │ segmentación        │
+                └─────────────────────┘
+```
+
+## Estructura del proyecto
+
+La organización puede variar según la versión del proyecto. De manera general, se contemplan los siguientes componentes:
+
+```text
+ProyectoTT/
+├── backend/
+├── public/
+├── src/
+├── unet_frijol.pth
+├── modelo_frijol_v2.pth
+├── requirements.txt
+├── package.json
+├── vite.config.js
+└── README.md
+```
+
+## Instalación y configuración
+
+### 1. Clonar el repositorio
+
+```bash
+git clone https://github.com/proyectosliz16-coder/Agrovision.git
+cd Agrovision
+```
+
+### 2. Preparar el backend
+
+Se recomienda utilizar un entorno virtual de Python para instalar las dependencias del proyecto de forma aislada.
+
+**Crear el entorno virtual:**
+
+```bash
+python -m venv venv
+```
+
+**Activarlo en Windows:**
+
+```bash
+venv\Scripts\activate
+```
+
+**Instalar las dependencias:**
+
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Preparación de Modelos de IA
+
+Descarga o copia los archivos de los modelos pesados en la carpeta raíz del proyecto (`ProyectoTT`).
+
+Los archivos necesarios son:
+
 - `unet_frijol.pth`
 - `modelo_frijol_v2.pth`
 
-### 2. Configuración del Backend (Python)
-Abre una terminal en la raíz del proyecto y sigue estos pasos:
+Asegúrate de que ambos archivos estén ubicados en la carpeta indicada antes de ejecutar el proyecto.
 
-1. (Opcional pero recomendado) Crea un entorno virtual:
-   ```bash
-   python -m venv venv
-   # En Windows:
-   venv\Scripts\activate
-   # En Mac/Linux:
-   source venv/bin/activate
-   ```
-2. Instala las dependencias necesarias:
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. Ejecuta el servidor del backend:
-   ```bash
-   uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
-   ```
-   El backend estará corriendo en `http://localhost:8000`.
+**Importante:** estos archivos deben estar disponibles localmente para que el sistema pueda cargar los modelos. Si no están incluidos en el repositorio, deberán obtenerse por separado.
 
-### 3. Configuración del Frontend (React + Vite)
-Abre otra terminal en la raíz del proyecto y ejecuta:
+### 4. Ejecutar el backend
 
-1. Instala las dependencias de Node:
-   ```bash
-   npm install
-   ```
-2. Inicia el servidor de desarrollo del frontend:
-   ```bash
-   npm run dev
-   ```
-   El frontend estará corriendo en `http://localhost:5173` (o el puerto que te indique Vite).
+Si el archivo principal de FastAPI se encuentra en `backend/main.py`, puedes iniciarlo con:
 
-¡Listo! Ya puedes acceder a la aplicación desde tu navegador e interactuar con la plataforma.
+```bash
+uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+Si el archivo principal se encuentra en otra ubicación, ajusta el comando según la estructura real del proyecto.
+
+### 5. Preparar el frontend
+
+Instala las dependencias de Node.js:
+
+```bash
+npm install
+```
+
+Inicia el servidor de desarrollo:
+
+```bash
+npm run dev
+```
+
+Utiliza la URL que indique la terminal para abrir la aplicación en el navegador.
+
+## Desarrollo del proyecto
+
+Participé en el desarrollo de AgroVision, trabajando en los componentes de inteligencia artificial y en la integración de la solución web.
+
+Las áreas de trabajo incluyen:
+
+- Desarrollo y experimentación con modelos de segmentación.
+- Preparación y procesamiento de imágenes.
+- Implementación del backend para la integración del modelo.
+- Desarrollo de la interfaz web.
+- Integración entre frontend, backend y modelo de inteligencia artificial.
+
+## Objetivo académico
+
+AgroVision explora el uso de técnicas de inteligencia artificial y visión por computadora para el análisis de imágenes agrícolas, como apoyo a la identificación visual de plantas, maleza y suelo en cultivos de frijol.
+
+
+## 📌 Nota
+
+Los resultados dependen de los modelos utilizados, de la calidad de las imágenes y de las condiciones de entrenamiento. El proyecto tiene un propósito académico y experimental.
+
+---
+
+**MJ AgroVision** 
+*Inteligencia artificial para el análisis de cultivos mediante visión por computadora.*
