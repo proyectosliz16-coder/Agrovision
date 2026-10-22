@@ -161,7 +161,7 @@ Las áreas de trabajo incluyen:
 AgroVision explora el uso de técnicas de inteligencia artificial y visión por computadora para el análisis de imágenes agrícolas, como apoyo a la identificación visual de plantas, maleza y suelo en cultivos de frijol.
 
 
-## 📌 Nota
+## Nota
 
 Los resultados dependen de los modelos utilizados, de la calidad de las imágenes y de las condiciones de entrenamiento. El proyecto tiene un propósito académico y experimental.
 
