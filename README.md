@@ -27,7 +27,7 @@ A través de técnicas de **segmentación semántica**, el sistema clasifica cad
 ![Interfaz de MJ AgroVision](docs/screenshots/interfaz.png)
 
 ### Resultado de segmentación
-![Resultado de segmentación de cultivos](docs/screenshots/segmentacion.png)
+![Resultado de segmentación de cultivos](docs/screenshots/segmentacion.jpeg)
 
 ---
 
