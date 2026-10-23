@@ -17,7 +17,17 @@ A través de técnicas de **segmentación semántica**, el sistema clasifica cad
 - **Herramienta de recorte interactivo:** Selección y delimitación de regiones de interés (ROI) directamente en el navegador antes del análisis.
 - **Ajuste fino de inferencia:** Configuración de umbrales de sensibilidad de maleza y contraste de suelo en tiempo real.
 - **Cálculo de métricas de cobertura:** Estimación porcentual automática de cobertura foliar del cultivo vs. infestación de maleza.
-- **Generación de reportes clínicos:** Exportación de diagnósticos e imágenes segmentadas en formato PDF con métricas del análisis.
+- **Generación de reportes:** Exportación de imágenes segmentadas en formato PDF con métricas del análisis.
+
+---
+
+## Capturas de pantalla
+
+### Interfaz de análisis
+![Interfaz de MJ AgroVision](docs/screenshots/interfaz.png)
+
+### Resultado de segmentación
+![Resultado de segmentación de cultivos](docs/screenshots/segmentacion.png)
 
 ---
 
@@ -177,5 +187,5 @@ Proyecto desarrollado como **Trabajo Terminal (TT)** en la **Unidad Profesional 
 
 ---
 
-**MJ AgroVision** 🌱  
+**MJ AgroVision** 
 *Inteligencia artificial y visión por computadora para la agricultura de precisión.*
