@@ -1,171 +1,181 @@
-# MJ Agrovision - ProyectoTT
-### Inteligencia artificial aplicada al análisis agrícola mediante visión por computadora
+# MJ AgroVision
 
-AgroVision es un proyecto que utiliza inteligencia artificial y visión por computadora para analizar imágenes de cultivos de frijol mediante técnicas de segmentación semántica. Su objetivo es identificar y diferenciar elementos presentes en las imágenes, como plantas, maleza y suelo.
+### Segmentación semántica y análisis de cultivos mediante Inteligencia Artificial | Proyecto TT
 
-El proyecto integra un modelo de inteligencia artificial con una aplicación web para facilitar la visualización de los resultados.
+AgroVision es una plataforma web orientada a la agricultura de precisión que integra modelos de visión por computadora y aprendizaje profundo (*Deep Learning*) para el análisis visual automatizado de cultivos de frijol. 
 
-## Características principales
+A través de técnicas de **segmentación semántica**, el sistema clasifica cada píxel de una imagen para diferenciar y cuantificar con precisión la presencia de **cultivo de frijol**, **maleza invasora** y **suelo**, permitiendo calcular porcentajes de cobertura y generar reportes técnicos de diagnóstico.
 
-- **Segmentación de imágenes:** análisis visual de cultivos de frijol.
-- **Identificación de elementos:** diferenciación entre plantas, maleza y suelo.
-- **Modelo de inteligencia artificial:** implementación de una arquitectura U-Net.
-- **Procesamiento de imágenes:** preparación y análisis de imágenes agrícolas.
-- **Backend:** procesamiento de solicitudes e integración del modelo mediante Python y FastAPI.
-- **Interfaz web:** visualización e interacción con el sistema mediante React.
+---
 
-## Tecnologías utilizadas
+## Funcionalidades principales
 
-| Tecnología | Uso |
+- **Segmentación semántica multiclase:** Clasificación a nivel de píxel en tres categorías clave:
+  - 🟢 **Cultivo de frijol:** Detección y delimitación de la planta objetivo.
+  - 🔵 **Maleza:** Identificación de maleza para evaluar competencia hídrica y nutricional.
+  - 🟤 **Suelo:** Estimación de terreno expuesto.
+- **Herramienta de recorte interactivo:** Selección y delimitación de regiones de interés (ROI) directamente en el navegador antes del análisis.
+- **Ajuste fino de inferencia:** Configuración de umbrales de sensibilidad de maleza y contraste de suelo en tiempo real.
+- **Cálculo de métricas de cobertura:** Estimación porcentual automática de cobertura foliar del cultivo vs. infestación de maleza.
+- **Generación de reportes clínicos:** Exportación de diagnósticos e imágenes segmentadas en formato PDF con métricas del análisis.
+
+---
+
+## Stack tecnológico
+
+| Área | Tecnologías |
 |---|---|
-| Python | Desarrollo del backend y procesamiento de imágenes |
-| PyTorch | Desarrollo y ejecución de modelos de IA |
-| U-Net | Arquitectura para segmentación de imágenes |
-| FastAPI | API para integrar el modelo con la aplicación |
-| React | Desarrollo de la interfaz de usuario |
-| Vite | Herramienta de desarrollo y construcción del frontend |
-| JavaScript | Funcionalidad de la aplicación web |
+| **Inteligencia Artificial** | PyTorch, `segmentation-models-pytorch` (smp) |
+| **Arquitectura de red** | U-Net con encoder/backbone **ResNet-34** |
+| **Procesamiento de imagen** | Albumentations, OpenCV (`cv2`), NumPy |
+| **Backend & API** | Python 3.10+, FastAPI, Uvicorn |
+| **Frontend** | React 19, Vite, JavaScript (ES6+) |
+| **Herramientas de cliente** | `react-image-crop`, `jsPDF`, `html2canvas` |
 
-## Arquitectura del proyecto
+---
 
-AgroVision integra los componentes de inteligencia artificial y desarrollo web para procesar imágenes y presentar los resultados.
+## Arquitectura del sistema
 
 ```text
-                ┌─────────────────────┐
-                │   Usuario           │
-                └──────────┬──────────┘
-                           │
-                           ▼
-                ┌─────────────────────┐
-                │  Frontend - React   │
-                └──────────┬──────────┘
-                           │
-                           ▼
-                ┌─────────────────────┐
-                │ Backend - FastAPI   │
-                └──────────┬──────────┘
-                           │
-                           ▼
-                ┌─────────────────────┐
-                │ Modelo de IA U-Net  │
-                └──────────┬──────────┘
-                           │
-                           ▼
-                ┌─────────────────────┐
-                │ Resultados de       │
-                │ segmentación        │
-                └─────────────────────┘
+┌────────────────────────────────────────────────────────┐
+│                   Usuario / Navegador                  │
+└───────────────────────────┬────────────────────────────┘
+                            │
+                            │ 1. Carga de imagen y recorte ROI
+                            ▼
+┌────────────────────────────────────────────────────────┐
+│                    Frontend (React 19)                 │
+│              Previsualización y controles              │
+└───────────────────────────┬────────────────────────────┘
+                            │
+                            │ 2. POST /api/analyze (Multipart/Form)
+                            ▼
+┌────────────────────────────────────────────────────────┐
+│                   Backend (FastAPI)                    │
+│        Preprocesamiento y normalización (Albumentations) │
+└───────────────────────────┬────────────────────────────┘
+                            │
+                            │ 3. Tensor (512x512x3)
+                            ▼
+┌────────────────────────────────────────────────────────┐
+│             Modelo Deep Learning (PyTorch)             │
+│                 U-Net + ResNet-34                      │
+│            Pesos entrenados: unet_frijol.pth           │
+└───────────────────────────┬────────────────────────────┘
+                            │
+                            │ 4. Máscara de segmentación (3 clases)
+                            ▼
+┌────────────────────────────────────────────────────────┐
+│                    Post-procesamiento                  │
+│       Cálculo de porcentajes + Máscara a color BGR     │
+└───────────────────────────┬────────────────────────────┘
+                            │
+                            │ 5. JSON + Máscara Base64
+                            ▼
+┌────────────────────────────────────────────────────────┐
+│              Frontend: Visualización & PDF             │
+└────────────────────────────────────────────────────────┘
 ```
 
-## Estructura del proyecto
+---
 
-La organización puede variar según la versión del proyecto. De manera general, se contemplan los siguientes componentes:
+## Endpoints de la API
+
+La API REST documentada interactivamente en `http://localhost:8000/docs`:
+
+| Método | Endpoint | Descripción |
+|---|---|---|
+| `POST` | `/api/preview` | Genera vista previa optimizada y escalada de la imagen subida. |
+| `POST` | `/api/analyze` | Aplica recorte, ejecuta la inferencia con U-Net y retorna porcentajes de cobertura y máscara segmentada. |
+
+---
+
+## Estructura del repositorio
 
 ```text
-ProyectoTT/
+Agrovision/
 ├── backend/
-├── public/
-├── src/
-├── unet_frijol.pth
-├── modelo_frijol_v2.pth
-├── requirements.txt
-├── package.json
+│   ├── main.py              # Servidor FastAPI y pipeline de inferencia
+│   ├── unet_frijol.pth      # Pesos del modelo U-Net (ResNet-34)
+│   └── requirements.txt     # Dependencias de Python
+├── public/                  # Recursos gráficos y estáticos
+├── src/                     # Código fuente de la interfaz React
+│   ├── App.jsx              # Componente principal y flujo de análisis
+│   └── main.jsx
+├── index.html
+├── package.json             # Dependencias del frontend
 ├── vite.config.js
 └── README.md
 ```
 
-## Instalación y configuración
+---
 
-### 1. Clonar el repositorio
+## Instalación y ejecución
 
-```bash
-git clone https://github.com/proyectosliz16-coder/Agrovision.git
-cd Agrovision
-```
+### Requisitos previos
 
-### 2. Preparar el backend
-
-Se recomienda utilizar un entorno virtual de Python para instalar las dependencias del proyecto de forma aislada.
-
-**Crear el entorno virtual:**
-
-```bash
-python -m venv venv
-```
-
-**Activarlo en Windows:**
-
-```bash
-venv\Scripts\activate
-```
-
-**Instalar las dependencias:**
-
-```bash
-pip install -r requirements.txt
-```
-
-### 3. Preparación de Modelos de IA
-
-Descarga o copia los archivos de los modelos pesados en la carpeta raíz del proyecto (`ProyectoTT`).
-
-Los archivos necesarios son:
-
-- `unet_frijol.pth`
-- `modelo_frijol_v2.pth`
-
-Asegúrate de que ambos archivos estén ubicados en la carpeta indicada antes de ejecutar el proyecto.
-
-**Importante:** estos archivos deben estar disponibles localmente para que el sistema pueda cargar los modelos. Si no están incluidos en el repositorio, deberán obtenerse por separado.
-
-### 4. Ejecutar el backend
-
-Si el archivo principal de FastAPI se encuentra en `backend/main.py`, puedes iniciarlo con:
-
-```bash
-uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
-```
-
-Si el archivo principal se encuentra en otra ubicación, ajusta el comando según la estructura real del proyecto.
-
-### 5. Preparar el frontend
-
-Instala las dependencias de Node.js:
-
-```bash
-npm install
-```
-
-Inicia el servidor de desarrollo:
-
-```bash
-npm run dev
-```
-
-Utiliza la URL que indique la terminal para abrir la aplicación en el navegador.
-
-## Desarrollo del proyecto
-
-Participé en el desarrollo de AgroVision, trabajando en los componentes de inteligencia artificial y en la integración de la solución web.
-
-Las áreas de trabajo incluyen:
-
-- Desarrollo y experimentación con modelos de segmentación.
-- Preparación y procesamiento de imágenes.
-- Implementación del backend para la integración del modelo.
-- Desarrollo de la interfaz web.
-- Integración entre frontend, backend y modelo de inteligencia artificial.
-
-## Objetivo académico
-
-AgroVision explora el uso de técnicas de inteligencia artificial y visión por computadora para el análisis de imágenes agrícolas, como apoyo a la identificación visual de plantas, maleza y suelo en cultivos de frijol.
-
-
-## Nota
-
-Los resultados dependen de los modelos utilizados, de la calidad de las imágenes y de las condiciones de entrenamiento. El proyecto tiene un propósito académico y experimental.
+- [Python](https://www.python.org/) 3.10 o superior
+- [Node.js](https://nodejs.org/) 18 o superior
 
 ---
 
-**MJ AgroVision** 
-*Inteligencia artificial para el análisis de cultivos mediante visión por computadora.*
+### 1. Configurar y ejecutar el Backend
+
+1. Accede a la carpeta `backend`:
+   ```bash
+   cd backend
+   ```
+
+2. Crea y activa un entorno virtual de Python:
+   ```bash
+   # Windows
+   python -m venv venv
+   venv\Scripts\activate
+
+   # Linux / macOS
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
+
+3. Instala las dependencias:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Pesos del modelo:**  
+   Asegúrate de que el archivo `unet_frijol.pth` se encuentre dentro de la carpeta `backend/`.
+
+5. Inicia el servidor de FastAPI:
+   ```bash
+   uvicorn main:app --reload --host 0.0.0.0 --port 8000
+   ```
+   La API estará disponible en `http://localhost:8000` y la documentación interactiva en `http://localhost:8000/docs`.
+
+---
+
+### 2. Configurar y ejecutar el Frontend
+
+En una nueva terminal, desde la raíz del proyecto:
+
+1. Instala las dependencias de Node:
+   ```bash
+   npm install
+   ```
+
+2. Inicia el servidor de desarrollo:
+   ```bash
+   npm run dev
+   ```
+
+3. Abre el navegador en la URL indicada por Vite (usualmente `http://localhost:5173`).
+
+---
+
+## Contexto del proyecto
+
+Proyecto desarrollado como **Trabajo Terminal (TT)** en la **Unidad Profesional Interdisciplinaria de Ingeniería Campus Zacatecas (UPIIZ - IPN)** para la carrera de Ingeniería en Sistemas Computacionales.
+
+---
+
+**MJ AgroVision** 🌱  
+*Inteligencia artificial y visión por computadora para la agricultura de precisión.*
